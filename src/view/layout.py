@@ -4,6 +4,7 @@ from src.view.tags import Tag
 from typing import Callable, Final, Iterable, Union, cast
 from config.default import Default
 from config.config import Config
+from src.view.tooltips import Tooltip
 
 
 # class Default:
@@ -63,64 +64,73 @@ def _header() -> None:
         with dpg.menu(label="View"):
             with dpg.menu(label="Console"):
                 dpg.add_radio_button(items=["Show", "Hide"], tag=Tag.SHOW_HIDE_CONSOLE, callback=show_hide_console,
-                                     default_value="Show")
+                                     default_value="Hide")
             with dpg.menu(label="Themes"):
                 dpg.add_radio_button(items=["Default", "Dark", "Light"])
 
 
 def _body() -> None:
-    with dpg.window(tag=Tag.SETTINGS_WINDOW, label="Setting Window", **Config.WINDOW_CONFIG):
-        settings_window()
-    with dpg.window(tag=Tag.PLOT_WINDOW, label="Plot Window", **Config.WINDOW_CONFIG):
-        plot_window()
-    with dpg.window(tag=Tag.CONSOLE_WINDOW, label="Console Window", **Config.WINDOW_CONFIG):
-        console_window()
+    settings_window()
+    plot_window()
+    console_window()
+    Tooltip.create_tooltips()
 
 
 def console_window() -> None:
-    with dpg.group(horizontal=True):
-        dpg.add_input_text(hint="Type Commend", tag=Tag.COMMEND_INPUT, width=420, tracked=True)
-        dpg.add_button(label="Send", width=100, tag=Tag.SEND_COMMEND_BUTTON)
-        dpg.add_checkbox(label="Autoscroll", default_value=True, tag=Tag.AUTOSCROLL_CHECKBOX)
-    with dpg.child_window(tag=Tag.CONSOLE, width=-1, height=-1):
-        pass
+    with dpg.window(tag=Tag.CONSOLE_WINDOW, label="Console Window", show=False, width=420,
+                    height=320):
+        with dpg.group(horizontal=True):
+            dpg.add_input_text(hint="Type Commend", tag=Tag.COMMEND_INPUT, width=420, tracked=True)
+            dpg.add_button(label="Send", width=100, tag=Tag.SEND_COMMEND_BUTTON)
+            dpg.add_checkbox(label="Autoscroll", default_value=True, tag=Tag.AUTOSCROLL_CHECKBOX)
+        with dpg.child_window(tag=Tag.CONSOLE, width=-1, height=-1):
+            pass
 
 
 def plot_window() -> None:
-    with dpg.group(horizontal=True):
-        dpg.add_slider_int(label="Data Frame", tag=Tag.NUMBER_OF_SAMPLES,
-                           min_value=Default.MIN_NUMBER_OF_SAMPLES, max_value=Default.MAX_NUMBER_OF_SAMPLES,
-                           width=420, default_value=Default.MAX_NUMBER_OF_SAMPLES // 2)
-        dpg.add_checkbox(label="Fit Y Axis", default_value=True, tag=Tag.FIT_Y_AXIS)
-        dpg.add_checkbox(label="Fit X Axis", default_value=True, tag=Tag.FIT_X_AXIS)
-        dpg.add_text(tag=Tag.WORKING_TIME)
-        dpg.add_text(default_value="s")
-    with dpg.plot(label="Sinus", height=-1, width=-1, tag=Tag.PLOT):
-        dpg.add_plot_legend()
+    with dpg.window(tag=Tag.PLOT_WINDOW, label="Plot Window", **Config.WINDOW_CONFIG):
+        with dpg.group(horizontal=True):
+            dpg.add_slider_int(label="Data Frame", tag=Tag.NUMBER_OF_SAMPLES,
+                               min_value=Default.MIN_NUMBER_OF_SAMPLES, max_value=Default.MAX_NUMBER_OF_SAMPLES,
+                               width=420, default_value=Default.MAX_NUMBER_OF_SAMPLES // 2)
+            dpg.add_checkbox(label="Fit Y Axis", default_value=True, tag=Tag.FIT_Y_AXIS)
+            dpg.add_checkbox(label="Fit X Axis", default_value=True, tag=Tag.FIT_X_AXIS)
+            dpg.add_text(tag=Tag.WORKING_TIME)
+            dpg.add_text(default_value="s")
+        with dpg.plot(label="Sinus", height=-1, width=-1, tag=Tag.PLOT):
+            dpg.add_plot_legend()
 
-        # REQUIRED: create x and y axes
-        dpg.add_plot_axis(dpg.mvXAxis, label="x", tag=Tag.PLOT_X_AXIS)
-        dpg.add_plot_axis(dpg.mvYAxis, label="y", tag=Tag.PLOT_Y_AXIS)
+            # REQUIRED: create x and y axes
+            dpg.add_plot_axis(dpg.mvXAxis, label="x", tag=Tag.PLOT_X_AXIS)
+            dpg.add_plot_axis(dpg.mvYAxis, label="SIN", tag=Tag.SIN_PLOT_Y_AXIS)
+            dpg.add_plot_axis(dpg.mvYAxis, label="PWM", tag=Tag.PWM_PLOT_Y_AXIS)
+            dpg.add_plot_axis(dpg.mvYAxis, label="TRIANGLE", tag=Tag.TRIANGLE_PLOT_Y_AXIS)
 
-        # series belong to a y axis
-        dpg.add_line_series(label="sin", parent=Tag.PLOT_Y_AXIS, tag=Tag.LINE_SERIES, x=[], y=[])
+            # series belong to a y axis
+            dpg.add_line_series(label="sin", parent=Tag.SIN_PLOT_Y_AXIS, tag=Tag.SIN_LINE_SERIES, x=[], y=[])
 
-        # dpg.set_axis_limits(axis=Tag.PLOT_Y_AXIS, ymin=-5, ymax=5)
-        # dpg.set_axis_limits_auto(Tag.)
+            dpg.add_line_series(label="pwm", parent=Tag.PWM_PLOT_Y_AXIS, tag=Tag.PWM_LINE_SERIES, x=[], y=[])
+
+            dpg.add_line_series(label="triangle", parent=Tag.TRIANGLE_PLOT_Y_AXIS, tag=Tag.TRIANGLE_LINE_SERIES, x=[],
+                                y=[])
+
+            # dpg.set_axis_limits(axis=Tag.PLOT_Y_AXIS, ymin=-5, ymax=5)
+            # dpg.set_axis_limits_auto(Tag.)
 
 
 def settings_window() -> None:
-    with dpg.tab_bar(tag=Tag.HEADER):
-        with dpg.tab(label="Connection"):
-            dpg.add_button(label="Start", width=-1, enabled=False)
+    with dpg.window(tag=Tag.SETTINGS_WINDOW, label="Setting Window", **Config.WINDOW_CONFIG):
+        with dpg.tab_bar(tag=Tag.HEADER):
+            with dpg.tab(label="Connection"):
+                dpg.add_button(label="Start", width=-1, enabled=False)
 
-        with dpg.tab(label="Simulation"):
-            with dpg.group(horizontal=True):
-                dpg.add_combo(items=["sin", "cos", "pwm"], label="Signal Type", width=100)
-                dpg.add_combo(items=["100 MG", "200 MG", "300 MG"], label="Frequency", width=100)
-            dpg.add_separator()
-            dpg.add_button(label="Start Simulation", width=-1, tag=Tag.START_SIMULATION_BUTTON)
-            dpg.add_button(label="Stop Simulation", width=-1, tag=Tag.STOP_SIMULATION_BUTTON)
+            with dpg.tab(label="Simulation"):
+                with dpg.group(horizontal=True):
+                    dpg.add_combo(items=["sin", "cos", "pwm"], label="Signal Type", width=100)
+                    dpg.add_combo(items=["100 MG", "200 MG", "300 MG"], label="Frequency", width=100)
+                dpg.add_separator()
+                dpg.add_button(label="Start Simulation", width=-1, tag=Tag.START_SIMULATION_BUTTON)
+                dpg.add_button(label="Stop Simulation", width=-1, tag=Tag.STOP_SIMULATION_BUTTON)
 
 
 def resize() -> None:

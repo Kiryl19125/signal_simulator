@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from view import layout
+from src.view import layout
 import tomllib
 from src.model.app import MainApp
 
@@ -11,7 +11,7 @@ def load_config() -> str:
 
 
 def quit_app() -> None:
-    MainApp.stop_threads()
+    # MainApp.stop_threads()
     dpg.destroy_context()
     # MainApp.main_worker.stop_working()  # stop working thread
     # MainApp.plotting_worker.stop_plotting()
@@ -40,13 +40,13 @@ def main() -> None:
     dpg.setup_dearpygui()
     layout.resize()
     dpg.show_viewport()
-    dpg.maximize_viewport()  # Optional
+    # dpg.maximize_viewport()  # Optional
     # MainApp.start_threads() # start working thread
 
     dpg.start_dearpygui()
-    MainApp.stop_threads()
+    # MainApp.stop_threads()
     dpg.destroy_context()
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
