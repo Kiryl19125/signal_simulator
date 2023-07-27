@@ -11,8 +11,9 @@ def load_config() -> str:
 
 
 def quit_app() -> None:
+    MainApp.stop_threads()
     dpg.destroy_context()
-    MainApp.main_worker.stop_working()  # stop working thread
+    # MainApp.main_worker.stop_working()  # stop working thread
     # MainApp.plotting_worker.stop_plotting()
     # MainApp.main_worker.worker_thread.join()
     # MainApp.plotting_worker.plotting_thread.join()
@@ -29,8 +30,8 @@ def main() -> None:
     # layout.set_start_button_callback(app.start_button_callback)
     # layout.set_stop_button_callback(app.stop_button_callback)
 
-    layout.set_start_simulation_callback(MainApp.start_button_callback)
-    layout.set_stop_simulation_callback(MainApp.stop_button_callback)
+    # layout.set_start_simulation_callback(MainApp.start_button_callback)
+    # layout.set_stop_simulation_callback(MainApp.stop_button_callback)
     layout.set_quit_button_callback(quit_app)
 
     dpg.create_viewport(title=load_config())
@@ -40,11 +41,11 @@ def main() -> None:
     layout.resize()
     dpg.show_viewport()
     dpg.maximize_viewport()  # Optional
-    MainApp.main_worker.start_working()  # start working thread
+    MainApp.start_threads() # start working thread
     # MainApp.plotting_worker.start_plotting()
     dpg.start_dearpygui()
-
-    quit_app()
+    MainApp.start_threads()
+    dpg.destroy_context()
 
 
 if __name__ == '__main__':

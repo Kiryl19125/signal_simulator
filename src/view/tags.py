@@ -15,6 +15,8 @@ class Tag(str, Enum):
     PLOT_X_AXIS = auto()
     PLOT_Y_AXIS = auto()
     LINE_SERIES = auto()
+    FIT_X_AXIS = auto()
+    FIT_Y_AXIS = auto()
     NUMBER_OF_SAMPLES = auto()
     SHOW_HIDE_CONSOLE = auto()
     HEADER = auto()

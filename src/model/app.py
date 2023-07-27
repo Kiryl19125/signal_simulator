@@ -30,19 +30,28 @@
 
 
 from src.model.worker import Worker
-from src.model.worker import Plotting
+from src.model.plotting import Plotting
+
+main_worker: Worker = Worker()
 
 
 class MainApp:
-    main_worker: Worker = Worker()
-    plotting_worker: Plotting = Plotting()
+    @staticmethod
+    def start_threads() -> None:
+        main_worker.start_working()
 
-    def start_button_callback(self):
-        # self.plotting_worker.flag = True
-        # print("Start button was pressed")
-        self.plotting_worker.start_plotting()
+    @staticmethod
+    def stop_threads() -> None:
+        main_worker.stop_working()
 
-    def stop_button_callback(self):
-        # print("Stop button was pressed")
-        # self.plotting_worker.flag = False
-        self.plotting_worker.stop_plotting()
+    # plotting_worker: Plotting = Plotting()
+
+    # def start_button_callback(self):
+    #     # self.plotting_worker.flag = True
+    #     # print("Start button was pressed")
+    #     self.plotting_worker.start_plotting()
+    #
+    # def stop_button_callback(self):
+    #     # print("Stop button was pressed")
+    #     # self.plotting_worker.flag = False
+    #     self.plotting_worker.stop_plotting()

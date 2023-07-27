@@ -88,11 +88,11 @@ def console_window() -> None:
 
 def plot_window() -> None:
     with dpg.group(horizontal=True):
-        dpg.add_drag_int(label="Number Of Samples", tag=Tag.NUMBER_OF_SAMPLES,
-                         min_value=Default.MIN_NUMBER_OF_SAMPLES, max_value=Default.MAX_NUMBER_OF_SAMPLES,
-                         width=420, default_value=Default.MAX_NUMBER_OF_SAMPLES // 2)
-        dpg.add_checkbox(label="Fit Y Axis", default_value=True)
-        dpg.add_checkbox(label="Fit X Axis", default_value=True)
+        dpg.add_slider_int(label="Data Frame", tag=Tag.NUMBER_OF_SAMPLES,
+                           min_value=Default.MIN_NUMBER_OF_SAMPLES, max_value=Default.MAX_NUMBER_OF_SAMPLES,
+                           width=420, default_value=Default.MAX_NUMBER_OF_SAMPLES // 2)
+        dpg.add_checkbox(label="Fit Y Axis", default_value=True, tag=Tag.FIT_Y_AXIS)
+        dpg.add_checkbox(label="Fit X Axis", default_value=True, tag=Tag.FIT_X_AXIS)
         dpg.add_text(tag=Tag.WORKING_TIME)
         dpg.add_text(default_value="s")
     with dpg.plot(label="Sinus", height=-1, width=-1, tag=Tag.PLOT):
@@ -103,9 +103,10 @@ def plot_window() -> None:
         dpg.add_plot_axis(dpg.mvYAxis, label="y", tag=Tag.PLOT_Y_AXIS)
 
         # series belong to a y axis
-        dpg.add_line_series(x=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], y=[1, 2, 3, 9, 31, 34, 21, 13, 1, 10],
-                            label="0.5 + 0.5 * sin(x)",
-                            parent=Tag.PLOT_Y_AXIS, tag=Tag.LINE_SERIES)
+        dpg.add_line_series(label="sin", parent=Tag.PLOT_Y_AXIS, tag=Tag.LINE_SERIES, x=[], y=[])
+
+        # dpg.set_axis_limits(axis=Tag.PLOT_Y_AXIS, ymin=-5, ymax=5)
+        # dpg.set_axis_limits_auto(Tag.)
 
 
 def settings_window() -> None:
