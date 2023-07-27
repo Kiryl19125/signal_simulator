@@ -1,0 +1,7 @@
+name = "Signals"
+version = "0.0.1"
+
+[dependetces]
+dearpygui = "^1.9.0"
+python = ">=3.8, <4.0"
+pyserial = "^3.5"
