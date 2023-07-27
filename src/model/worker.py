@@ -27,6 +27,7 @@ class Worker:
                 Controller.update_line_series(data_x=time_data, data_y=signal_data)
                 time.sleep(0.001)
 
+        self.worker_event.clear()
         self.worker_thread = Thread(target=task, args=(self.worker_event,), daemon=True)
 
         self.worker_thread.start()
