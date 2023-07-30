@@ -97,11 +97,11 @@ def plot_window() -> None:
             dpg.add_checkbox(label="Fit X Axis", default_value=True, tag=Tag.FIT_X_AXIS)
             dpg.add_text(tag=Tag.WORKING_TIME)
             dpg.add_text(default_value="s")
-        with dpg.plot(label="Sinus", height=-1, width=-1, tag=Tag.PLOT):
+        with dpg.plot(label="Sinus", height=-1, width=-1, tag=Tag.PLOT, crosshairs=True):
             dpg.add_plot_legend()
 
             # REQUIRED: create x and y axes
-            dpg.add_plot_axis(dpg.mvXAxis, label="x", tag=Tag.PLOT_X_AXIS)
+            dpg.add_plot_axis(dpg.mvXAxis, label="x", tag=Tag.PLOT_X_AXIS, time=True)
             dpg.add_plot_axis(dpg.mvYAxis, label="SIN", tag=Tag.SIN_PLOT_Y_AXIS)
             dpg.add_plot_axis(dpg.mvYAxis, label="PWM", tag=Tag.PWM_PLOT_Y_AXIS)
             dpg.add_plot_axis(dpg.mvYAxis, label="TRIANGLE", tag=Tag.TRIANGLE_PLOT_Y_AXIS)
